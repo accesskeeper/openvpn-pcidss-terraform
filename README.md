@@ -1,7 +1,13 @@
-#PCIDSS_compliant MFA(google-auth) openvpn installation using:
+PCIDSS_compliant MFA (google-auth) openvpn cluster installation using:
 packer,
 terraform,
 aws systems amanger (ansible playbook)
+
+Contains steps to:  
+1. create AWS AMI image using packer  
+2. generate offline CA , server and client keys  
+3. Deploying infrastructure using terraform, which creates S3 buckets, instances, IAM, security groups and runs AWS Systems manager (ansible playbook) on the instances.  
+by default creates 1 master and 1 slave node. Possible to slightly adjust the code to create 1 master and multiple slaves.  
 
 #1. GENERATING offline CA and server keys
 on your local offline Certification authority server. (for testing purposes you can do it just on your local)
