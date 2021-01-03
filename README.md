@@ -1,4 +1,4 @@
-PCIDSS_compliant MFA(google-auth) openvpn installation using:
+PCIDSS_compliant MFA(google-auth) openvpn installation using:  
 packer  
 terraform  
 aws systems amanger (ansible playbook)  
