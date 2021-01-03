@@ -1,6 +1,6 @@
 #PCIDSS_compliant MFA(google-auth) openvpn installation using:
-packer
-terraform
+packer,
+terraform,
 aws systems amanger (ansible playbook)
 
 #1. GENERATING offline CA and server keys
