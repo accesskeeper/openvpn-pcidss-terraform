@@ -1,7 +1,7 @@
-PCIDSS_compliant MFA (google-auth) openvpn cluster installation using:
-packer,
-terraform,
-aws systems amanger (ansible playbook)
+PCIDSS_compliant MFA (google-auth) openvpn cluster installation using:  
+packer,  
+terraform,  
+aws systems amanger (ansible playbook)  
 
 Contains steps to:  
 1. create AWS AMI image using packer  
