@@ -1,0 +1,2 @@
+#!/bin/bash
+aws ssm create-association --name "AWS-ApplyAnsiblePlaybooks" --parameters '{"SourceType":["S3"],"SourceInfo":["{\"path\": \"https://companypci-vpn.s3-eu-west-1.amazonaws.com/ovpn.zip\"}"],"InstallDependencies":["False"],"PlaybookFile":["ovpn/ovpn-master.yml"],"ExtraVariables":["myregion=eu-west-1"],"Check":["False"],"Verbose":["-v"]}' --targets '[{"Key":"tag:vpn","Values":["master"]}]' --max-concurrency "50" --max-errors "0" --region eu-west-1 --association-name "openvpn-master"|grep AssociationId|cut -d '"' -f4 > master.id

@@ -1,0 +1,7 @@
+aws_region                    = "eu-west-1"
+instance_type                 = "t3.medium"
+environment_name              = "staging"
+hosted_zone_name              = "staging.io"
+application_name              = "company"
+service                       = "vpn"
+service_tag                   = "01"

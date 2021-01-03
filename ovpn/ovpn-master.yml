@@ -1,0 +1,6 @@
+- hosts: all
+  gather_facts: true
+  become: true
+  roles:
+          - {role: openvpn, node: master, clients: [admin],
+                        openvpn_port: 4300, openvpn_revoke_these_certs: []}

@@ -1,0 +1,46 @@
+client
+auth-user-pass
+
+tls-client
+auth $openvpn_auth_alg
+cipher $openvpn_cipher
+remote-cert-tls server
+tls-version-min 1.2
+
+proto $openvpn_proto
+remote $openvpn_server_hostname ${openvpn_port}
+dev tun
+
+resolv-retry 5
+nobind
+keepalive 5 30
+compress lzo
+persist-key
+persist-tun
+verb 3
+
+#FIXES
+tun-mtu 1400
+fragment 1400
+mssfix 1300
+script-security 2
+pull
+reneg-sec 0
+sndbuf 393216
+rcvbuf 393216
+push "sndbuf 393216"
+push "rcvbuf 393216"
+
+
+route-method exe
+route-delay 5
+
+dhcp-option DNS 172.31.0.2
+#DNS
+up start.sh
+down stop.sh
+#DNS WIN
+#register-dns
+
+
+key-direction 1

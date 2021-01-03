@@ -1,0 +1,80 @@
+# generate gauth
+---
+- set_fact:
+    additional_certs_to_revoke: "{{ _additional_certs_to_revoke.stdout_lines | default([]) }}"
+    additional_certs_to_add: "{{ _additional_certs_to_add.stdout_lines | default([]) }}"
+
+- name: Copy pam config
+  copy:
+    src: openvpn
+    dest: /etc/pam.d/openvpn
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Add group 'gauth'
+  group:
+    name: gauth
+
+- name: Add user 'gauth' and a primary group of 'gauth'
+  user:
+    name: gauth
+    comment: gauth
+    group: gauth
+
+    #useradd gauth
+- name: Create gauth directory
+  file:
+    path: /etc/openvpn/google-authenticator
+    state: directory
+    owner: gauth
+    group: gauth
+    mode: 0700
+
+            #chown gauth:gauth /etc/openvpn/google-authenticator && chmod 700 /etc/openvpn/google-authenticator
+
+- name: Add users without a bash shell
+  user:
+    name: "{{item}}"
+    shell: /sbin/nologin
+  with_items:
+    - "{{clients}}"
+    
+    #useradd -s /sbin/nologin <username>
+
+      #- name: generate client pas
+      #  command: "PASS=$(head -n 4096 /dev/urandom | tr -dc a-zA-Z0-9 | cut -b 1-20) && echo '$PASS'|passwd --stdin {{item}}"
+      #  with_items:
+      #    - "{{clients}}"
+  
+  ##echo "$PASS" | passwd --stdin <username>
+
+
+- name: generate gauth
+  command: "su -c 'google-authenticator -t -d -r3 -R30 -w3 -f -C -l unwire-vpn -s /etc/openvpn/google-authenticator/{{item}} > /etc/openvpn/google-authenticator/{{item}}.2FA' - gauth"
+  with_items:
+          #    - "{{clients}}"
+    - "{{ additional_certs_to_add }}"
+  when: node == "master"
+
+- name: Fetch for gauth
+  fetch:
+    src: /etc/openvpn/google-authenticator/{{item}}
+    dest: /tmp/certs/{{item}}
+    flat: yes
+  with_items:
+    - "{{clients}}"
+    - "{{ additional_certs_to_add }}"
+  when: node == "master"
+
+- name: Copy gauth to slave
+  copy:
+    src: /tmp/certs/{{item}}
+    dest: /etc/openvpn/google-authenticator/{{item}}
+    owner: gauth
+    group: gauth
+    mode: 0400
+  with_items:
+    - "{{clients}}"
+    - "{{ additional_certs_to_add }}"
+  when: node == "slave"

@@ -1,0 +1,19 @@
+- name: Copy selinux
+  copy:
+    src: mycertwatch.te
+    dest: /etc/openvpn/
+    owner: root
+    group: root
+    mode: 0640
+
+- name: Copy selinux
+  copy:
+    src: mycertwatch.pp
+    dest: /etc/openvpn/
+    owner: root
+    group: root
+    mode: 0640
+
+- name: apply selinux policy
+  command: "semodule -i /etc/openvpn/mycertwatch.pp"
+  become: true
